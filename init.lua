@@ -7,9 +7,25 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   vim.cmd [[packadd packer.nvim]]
 end
 
+_G.__luacache_config = {
+  chunks = {
+    enable = true,
+    path = vim.fn.stdpath('cache')..'/luacache_chunks',
+  },
+  modpaths = {
+    enable = true,
+    path = vim.fn.stdpath('cache')..'/luacache_modpaths',
+  }
+}
+require('impatient')
+
 require('packer').startup(function(use)
   -- Package manager
   use 'wbthomason/packer.nvim'
+  use 'lewis6991/impatient.nvim'
+  use {
+  'echasnovski/mini.nvim',
+  }
 
   use { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
@@ -38,21 +54,25 @@ require('packer').startup(function(use)
     end,
   }
 
+
   use { -- Additional text objects via treesitter
     'nvim-treesitter/nvim-treesitter-textobjects',
     after = 'nvim-treesitter',
   }
 
   -- Git related plugins
-  use 'tpope/vim-fugitive'
-  use 'tpope/vim-rhubarb'
   use 'lewis6991/gitsigns.nvim'
 
-  use 'navarasu/onedark.nvim' -- Theme inspired by Atom
+  use 'vimwiki/vimwiki'
+  use 'ellisonleao/gruvbox.nvim'
+  use { 'goolord/alpha-nvim',
+    requires = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require 'alpha'.setup(require 'alpha.themes.dashboard'.config)
+    end }
   use 'nvim-lualine/lualine.nvim' -- Fancier statusline
   use 'lukas-reineke/indent-blankline.nvim' -- Add indentation guides even on blank lines
-  use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
-  use 'tpope/vim-sleuth' -- Detect tabstop and shiftwidth automatically
+  -- use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
 
   -- Fuzzy Finder (files, lsp, etc)
   use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
@@ -96,10 +116,14 @@ vim.api.nvim_create_autocmd('BufWritePost', {
 -- See `:help vim.o`
 
 -- Set highlight on search
-vim.o.hlsearch = false
+vim.o.hlsearch = true
+
+-- Set esc to take the highlights out
+vim.keymap.set({ 'n', }, '<ESC>', ':noh<CR>', { silent = true })
 
 -- Make line numbers default
 vim.wo.number = true
+vim.wo.relativenumber = true
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
@@ -120,7 +144,7 @@ vim.wo.signcolumn = 'yes'
 
 -- Set colorscheme
 vim.o.termguicolors = true
-vim.cmd [[colorscheme onedark]]
+vim.cmd [[colorscheme gruvbox]]
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -151,6 +175,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
+require('mini.comment').setup({})
+require('mini.tabline').setup({})
+require('mini.pairs').setup({})
+require('mini.surround').setup({})
+require('mini.bufremove').setup({})
+require('mini.trailspace').setup({})
+require('mini.cursorword').setup({})
+-- require('mini.animate').setup({})
+require('mini.indentscope').setup({})
+
 -- Set lualine as statusline
 -- See `:help lualine.txt`
 require('lualine').setup {
@@ -163,7 +197,7 @@ require('lualine').setup {
 }
 
 -- Enable Comment.nvim
-require('Comment').setup()
+-- require('Comment').setup()
 
 -- Enable `lukas-reineke/indent-blankline.nvim`
 -- See `:help indent_blankline.txt`
@@ -381,6 +415,19 @@ mason_lspconfig.setup_handlers {
 -- Turn on lsp status information
 require('fidget').setup()
 
+-- vimwiki config
+vim.g.vimwiki_list = {
+  {
+    path = "~/vimwiki",
+    syntax = "markdown",
+    ext = ".md",
+    path_html = "~/.local/src/wiki/",
+    template_path = "~/.local/src/wiki/assets/layouts",
+    template_default = "default",
+    custom_wiki2html = "vimwiki_markdown",
+    template_ext = ".tpl",
+  },
+}
 -- nvim-cmp setup
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'

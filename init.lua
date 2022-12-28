@@ -10,11 +10,11 @@ end
 _G.__luacache_config = {
   chunks = {
     enable = true,
-    path = vim.fn.stdpath('cache')..'/luacache_chunks',
+    path = vim.fn.stdpath('cache') .. '/luacache_chunks',
   },
   modpaths = {
     enable = true,
-    path = vim.fn.stdpath('cache')..'/luacache_modpaths',
+    path = vim.fn.stdpath('cache') .. '/luacache_modpaths',
   }
 }
 require('impatient')
@@ -23,8 +23,9 @@ require('packer').startup(function(use)
   -- Package manager
   use 'wbthomason/packer.nvim'
   use 'lewis6991/impatient.nvim'
+  use 'windwp/nvim-autopairs'
   use {
-  'echasnovski/mini.nvim',
+    'echasnovski/mini.nvim',
   }
 
   use { -- LSP Configuration & Plugins
@@ -42,9 +43,11 @@ require('packer').startup(function(use)
     },
   }
 
+  use 'rafamadriz/friendly-snippets'
   use { -- Autocompletion
     'hrsh7th/nvim-cmp',
-    requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
+    requires = { 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-calc', 'hrsh7th/cmp-emoji', 'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip' },
   }
 
   use { -- Highlight, edit, and navigate code
@@ -177,13 +180,15 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 require('mini.comment').setup({})
 require('mini.tabline').setup({})
-require('mini.pairs').setup({})
 require('mini.surround').setup({})
 require('mini.bufremove').setup({})
 require('mini.trailspace').setup({})
 require('mini.cursorword').setup({})
+-- require('mini.pairs').setup({})
 -- require('mini.animate').setup({})
 require('mini.indentscope').setup({})
+
+require('nvim-autopairs').setup()
 
 -- Set lualine as statusline
 -- See `:help lualine.txt`
@@ -466,10 +471,18 @@ cmp.setup {
     end, { 'i', 's' }),
   },
   sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
+    { name = 'nvim_lsp', priority = 1000 },
+    { name = 'luasnip', priority = 750 },
+    { name = 'emoji', priority = 700 },
+    { name = 'pandoc_references', priority = 700 },
+    { name = 'latex_symbols', priority = 700 },
+    { name = 'calc', priority = 650 },
+    { name = 'path', priority = 500 },
+    { name = 'buffer', priority = 250 },
   },
 }
+
+require("luasnip.loaders.from_vscode").lazy_load()
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

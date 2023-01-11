@@ -10,7 +10,8 @@ end
 _G.__luacache_config = {
   chunks = {
     enable = true,
-    path = vim.fn.stdpath('cache') .. '/luacache_chunks', },
+    path = vim.fn.stdpath('cache') .. '/luacache_chunks',
+  },
   modpaths = {
     enable = true,
     path = vim.fn.stdpath('cache') .. '/luacache_modpaths',
@@ -45,7 +46,8 @@ require('packer').startup(function(use)
   use 'rafamadriz/friendly-snippets'
   use { -- Autocompletion
     'hrsh7th/nvim-cmp',
-    requires = { 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-calc', 'hrsh7th/cmp-emoji', 'L3MON4D3/LuaSnip',
+    requires = { 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-calc',
+      'hrsh7th/cmp-emoji', 'L3MON4D3/LuaSnip',
       'saadparwaiz1/cmp_luasnip' },
   }
 

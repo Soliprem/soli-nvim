@@ -10,8 +10,7 @@ end
 _G.__luacache_config = {
   chunks = {
     enable = true,
-    path = vim.fn.stdpath('cache') .. '/luacache_chunks',
-  },
+    path = vim.fn.stdpath('cache') .. '/luacache_chunks', },
   modpaths = {
     enable = true,
     path = vim.fn.stdpath('cache') .. '/luacache_modpaths',
@@ -68,11 +67,11 @@ require('packer').startup(function(use)
 
   use 'vimwiki/vimwiki'
   use 'ellisonleao/gruvbox.nvim'
-  use { 'goolord/alpha-nvim',
-    requires = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-      require 'alpha'.setup(require 'alpha.themes.dashboard'.config)
-    end }
+  -- use { 'goolord/alpha-nvim',
+  --   requires = { 'nvim-tree/nvim-web-devicons' },
+  --   config = function()
+  --     require 'alpha'.setup(require 'alpha.themes.dashboard'.config)
+  --   end }
   use 'nvim-lualine/lualine.nvim' -- Fancier statusline
   use 'lukas-reineke/indent-blankline.nvim' -- Add indentation guides even on blank lines
   -- use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
@@ -179,6 +178,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 require('mini.comment').setup({})
+require('mini.starter').setup({})
 require('mini.tabline').setup({})
 require('mini.surround').setup({})
 require('mini.bufremove').setup({})
